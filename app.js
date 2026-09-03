@@ -22,6 +22,7 @@ function fields() {
     weekday: form.weekday.value,
     monthDay: form.monthDay.value,
     weeks: form.weeks.value,
+    startDate: form.startDate.value,
   };
 }
 
@@ -34,8 +35,9 @@ function sync() {
 
   const mode = form.mode.value;
   document.getElementById("once-fields").hidden = mode !== "once";
-  document.getElementById("week-fields").hidden = mode !== "weekly" && mode !== "nweeks";
+  document.getElementById("week-fields").hidden = mode !== "weekly";
   document.getElementById("nweeks-fields").hidden = mode !== "nweeks";
+  document.getElementById("start-fields").hidden = mode === "once";
   document.getElementById("month-fields").hidden = mode !== "monthly";
 
   const result = buildRemind(fields());

@@ -51,10 +51,31 @@ const nweeks = buildRemind({
   mode: "nweeks",
   date: "",
   time: "09:30",
-  weekday: "Monday",
+  weekday: "",
   monthDay: "",
   weeks: "3",
+  startDate: "2026-09-07",
 });
-assert.equal(nweeks.command, '/remind me to "点検" every 3 weeks on Monday at 9:30am');
+assert.equal(
+  nweeks.command,
+  '/remind me to "点検" every 3 weeks on Monday at 9:30am starting September 7, 2026',
+);
+
+const later = buildRemind({
+  dest: "me",
+  name: "",
+  message: "点検",
+  mode: "nweeks",
+  date: "",
+  time: "09:30",
+  weekday: "",
+  monthDay: "",
+  weeks: "3",
+  startDate: "2026-09-14",
+});
+assert.equal(
+  later.command,
+  '/remind me to "点検" every 3 weeks on Monday at 9:30am starting September 14, 2026',
+);
 
 console.log("ok");

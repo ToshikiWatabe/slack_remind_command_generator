@@ -34,48 +34,61 @@ export function whoPhrase(dest, name) {
   return dest === "channel" ? `#${raw}` : `@${raw}`;
 }
 
-export function whenPhrase(mode, { date, time, weekday, monthDay, weeks }) {
+export function formatStart(iso) {
+  const d = new Date(`${iso}T00:00:00`);
+  return `starting ${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+}
+
+export function weekdayFromDate(iso) {
+  const d = new Date(`${iso}T00:00:00`);
+  return WEEKDAYS[d.getDay()];
+}
+
+export function whenPhrase(mode, { date, time, weekday, monthDay, weeks, startDate }) {
   if (!time) return "";
   const clock = formatClock(time);
+  const start = startDate ? ` ${formatStart(startDate)}` : "";
   if (mode === "once") {
     if (!date) return "";
     const d = new Date(`${date}T00:00:00`);
     return `on ${MONTHS[d.getMonth()]} ${d.getDate()} at ${clock}`;
   }
-  if (mode === "daily") return `every day at ${clock}`;
-  if (mode === "weekday") return `every weekday at ${clock}`;
+  if (mode === "daily") return `every day at ${clock}${start}`;
+  if (mode === "weekday") return `every weekday at ${clock}${start}`;
   if (mode === "weekly") {
     if (!weekday) return "";
-    return `every ${weekday} at ${clock}`;
+    return `every ${weekday} at ${clock}${start}`;
   }
   if (mode === "nweeks") {
     const n = Number(weeks);
-    if (!Number.isInteger(n) || n < 1 || !weekday) return "";
-    if (n === 1) return `every ${weekday} at ${clock}`;
-    return `every ${n} weeks on ${weekday} at ${clock}`;
+    if (!Number.isInteger(n) || n < 1 || !startDate) return "";
+    const day = weekdayFromDate(startDate);
+    const body = n === 1 ? `every ${day} at ${clock}` : `every ${n} weeks on ${day} at ${clock}`;
+    return `${body}${start}`;
   }
   if (mode === "monthly") {
     const day = Number(monthDay);
     if (!day) return "";
-    return `every month on the ${ordinal(day)} at ${clock}`;
+    return `every month on the ${ordinal(day)} at ${clock}${start}`;
   }
   return "";
 }
 
-export function buildRemind({ dest, name, message, mode, date, time, weekday, monthDay, weeks }) {
+export function buildRemind({ dest, name, message, mode, date, time, weekday, monthDay, weeks, startDate }) {
   const who = whoPhrase(dest, name);
   const what = message.trim();
-  const when = whenPhrase(mode, { date, time, weekday, monthDay, weeks });
+  const when = whenPhrase(mode, { date, time, weekday, monthDay, weeks, startDate });
   const missing = [];
   if (!who) missing.push(dest === "me" ? "宛先" : dest === "channel" ? "チャンネル名" : "ユーザー名");
   if (!what) missing.push("本文");
   if (!when) {
     if (mode === "once" && !date) missing.push("日付");
     if (!time) missing.push("時刻");
-    if ((mode === "weekly" || mode === "nweeks") && !weekday) missing.push("曜日");
+    if (mode === "weekly" && !weekday) missing.push("曜日");
     if (mode === "nweeks") {
       const n = Number(weeks);
       if (!Number.isInteger(n) || n < 1) missing.push("週の間隔");
+      if (!startDate) missing.push("開始日");
     }
     if (mode === "monthly" && !monthDay) missing.push("日");
   }
