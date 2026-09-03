@@ -1,0 +1,28 @@
+# Dependencies and build
+node_modules/
+dist/
+build/
+.vite/
+.turbo/
+*.tsbuildinfo
+
+# Secrets
+.env
+.env.*
+!.env.example
+credentials.json
+secrets.*
+*.pem
+*.key
+
+# OS and editor
+.DS_Store
+Thumbs.db
+*.log
+
+# Local agent / tool state (not shared)
+.superpowers/
+.compound-engineering/config.local.yaml
+.idea/
+.vscode/*
+!.vscode/extensions.json

@@ -1,0 +1,10 @@
+---
+description: Company-approved external APIs for this repository
+alwaysApply: true
+---
+
+# Approved external APIs
+
+No external APIs are approved for this repository yet.
+
+This app must not call Slack or other third-party APIs in v1. Command generation stays in the browser.

@@ -1,0 +1,16 @@
+# Slack Remind Command Generator
+
+Slack の `/remind` コマンドを、フォーム入力から組み立ててコピーする Web アプリです。
+
+いまは実装前です。要件は `docs/plans/2026-09-03-001-feat-slack-remind-command-generator-plan.md` にあります。
+
+## 方針（v1）
+
+- ブラウザだけで動く（サーバー・Slack API・ログインなし）
+- コマンド構文は英語、本文は日本語可
+- 生成結果をコピーして Slack に貼る
+- あとから GitHub Pages で静的公開できる形を維持する
+
+## 開発
+
+実装手順は要件メモを実装計画に落としてから進めます。ローカル起動方法は、アプリを追加したときにここに書きます。

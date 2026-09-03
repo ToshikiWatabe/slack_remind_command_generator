@@ -1,0 +1,16 @@
+---
+description: Product constraints for the Slack /remind generator
+alwaysApply: true
+---
+
+# Product constraints
+
+v1 is a single-page, browser-only form that builds a Slack `/remind` command and copies it.
+
+- Keep the command keywords and time phrases in English. The reminder body may be Japanese.
+- Destinations: `me`, a channel, or a user.
+- Layout: one column. Destination, message, when-mode, mode-specific fields, live preview, copy.
+- Choose when-mode first, then show only the fields that mode needs.
+- No server, Slack API, login, templates, or generation history.
+- Stay static-hostable (GitHub Pages later). Do not add a build that requires a server at runtime.
+- Do not invent Slack time phrases. Offer only forms documented in `.cursor/skills/slack-remind-syntax/SKILL.md` or current Slack help.
