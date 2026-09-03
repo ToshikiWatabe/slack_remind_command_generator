@@ -78,4 +78,18 @@ assert.equal(
   '/remind me to "点検" every 3 weeks on Monday at 9:30am starting September 14, 2026',
 );
 
+const yearly = buildRemind({
+  dest: "me",
+  name: "",
+  message: "更新",
+  mode: "yearly",
+  date: "",
+  time: "09:30",
+  weekday: "",
+  monthDay: "",
+  weeks: "",
+  startDate: "2026-09-07",
+});
+assert.equal(yearly.command, '/remind me to "更新" every September 7th at 9:30am');
+
 console.log("ok");

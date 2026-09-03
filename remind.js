@@ -71,6 +71,11 @@ export function whenPhrase(mode, { date, time, weekday, monthDay, weeks, startDa
     if (!day) return "";
     return `every month on the ${ordinal(day)} at ${clock}${start}`;
   }
+  if (mode === "yearly") {
+    if (!startDate) return "";
+    const d = new Date(`${startDate}T00:00:00`);
+    return `every ${MONTHS[d.getMonth()]} ${ordinal(d.getDate())} at ${clock}`;
+  }
   return "";
 }
 
@@ -91,6 +96,7 @@ export function buildRemind({ dest, name, message, mode, date, time, weekday, mo
       if (!startDate) missing.push("開始日");
     }
     if (mode === "monthly" && !monthDay) missing.push("日");
+    if (mode === "yearly" && !startDate) missing.push("開始日");
   }
   if (missing.length) return { ok: false, missing, command: "" };
   const body = quoteWhat(what);
