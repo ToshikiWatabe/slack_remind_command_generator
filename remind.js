@@ -34,7 +34,7 @@ export function whoPhrase(dest, name) {
   return dest === "channel" ? `#${raw}` : `@${raw}`;
 }
 
-export function whenPhrase(mode, { date, time, weekday, monthDay }) {
+export function whenPhrase(mode, { date, time, weekday, monthDay, weeks }) {
   if (!time) return "";
   const clock = formatClock(time);
   if (mode === "once") {
@@ -48,9 +48,11 @@ export function whenPhrase(mode, { date, time, weekday, monthDay }) {
     if (!weekday) return "";
     return `every ${weekday} at ${clock}`;
   }
-  if (mode === "biweekly") {
-    if (!weekday) return "";
-    return `every 2 weeks on ${weekday} at ${clock}`;
+  if (mode === "nweeks") {
+    const n = Number(weeks);
+    if (!Number.isInteger(n) || n < 1 || !weekday) return "";
+    if (n === 1) return `every ${weekday} at ${clock}`;
+    return `every ${n} weeks on ${weekday} at ${clock}`;
   }
   if (mode === "monthly") {
     const day = Number(monthDay);
@@ -60,17 +62,21 @@ export function whenPhrase(mode, { date, time, weekday, monthDay }) {
   return "";
 }
 
-export function buildRemind({ dest, name, message, mode, date, time, weekday, monthDay }) {
+export function buildRemind({ dest, name, message, mode, date, time, weekday, monthDay, weeks }) {
   const who = whoPhrase(dest, name);
   const what = message.trim();
-  const when = whenPhrase(mode, { date, time, weekday, monthDay });
+  const when = whenPhrase(mode, { date, time, weekday, monthDay, weeks });
   const missing = [];
   if (!who) missing.push(dest === "me" ? "宛先" : dest === "channel" ? "チャンネル名" : "ユーザー名");
   if (!what) missing.push("本文");
   if (!when) {
     if (mode === "once" && !date) missing.push("日付");
     if (!time) missing.push("時刻");
-    if ((mode === "weekly" || mode === "biweekly") && !weekday) missing.push("曜日");
+    if ((mode === "weekly" || mode === "nweeks") && !weekday) missing.push("曜日");
+    if (mode === "nweeks") {
+      const n = Number(weeks);
+      if (!Number.isInteger(n) || n < 1) missing.push("週の間隔");
+    }
     if (mode === "monthly" && !monthDay) missing.push("日");
   }
   if (missing.length) return { ok: false, missing, command: "" };

@@ -44,4 +44,17 @@ const incomplete = buildRemind({
 assert.equal(incomplete.ok, false);
 assert.ok(incomplete.missing.includes("日"));
 
+const nweeks = buildRemind({
+  dest: "me",
+  name: "",
+  message: "点検",
+  mode: "nweeks",
+  date: "",
+  time: "09:30",
+  weekday: "Monday",
+  monthDay: "",
+  weeks: "3",
+});
+assert.equal(nweeks.command, '/remind me to "点検" every 3 weeks on Monday at 9:30am');
+
 console.log("ok");

@@ -38,7 +38,7 @@ description: この生成アプリ向けの Slack /remind（英語構文）。�
 | 毎日 | `every day at 9:00am` |
 | 平日 | `every weekday at 9:00am` |
 | 毎週 | `every Friday at 5:00pm` |
-| 隔週 | `every other Friday at 5:00pm` |
+| n週間ごと | `every 3 weeks on Monday at 9:30am`（1週間なら `every Monday at 9:30am`） |
 | 毎月 | 出荷前に Slack ヘルプを確認する。安定した書き方がなければ、推測せずモードを出さない。 |
 
 時刻は 12 時間表記（`9:00am` / `5:00pm`）が公式で多い。タイムゾーン ID は付けない。Slack は `/remind` を実行した人の設定を使う。

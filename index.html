@@ -38,13 +38,17 @@
       <option value="daily">毎日</option>
       <option value="weekday">平日</option>
       <option value="weekly">毎週</option>
-      <option value="biweekly">隔週</option>
+      <option value="nweeks">n週間ごと</option>
       <option value="monthly">毎月</option>
     </select>
 
     <div id="once-fields">
       <label for="date">日付</label>
       <input id="date" name="date" type="date">
+    </div>
+    <div id="nweeks-fields" hidden>
+      <label for="weeks">何週間に1回</label>
+      <input id="weeks" name="weeks" type="number" min="1" step="1" value="2">
     </div>
     <div id="week-fields" hidden>
       <label for="weekday">曜日</label>
