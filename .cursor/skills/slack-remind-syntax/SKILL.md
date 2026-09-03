@@ -1,50 +1,50 @@
 ---
 name: slack-remind-syntax
-description: Slack /remind English command syntax for this generator. Use when implementing or changing command assembly, when-modes, quoting, or destination formatting.
+description: この生成アプリ向けの Slack /remind（英語構文）。コマンド組み立て、日時モード、引用符、宛先の実装・変更時に使う。
 ---
 
-# Slack /remind syntax
+# Slack `/remind` の構文
 
-Generate one line the user pastes into Slack. Verify against current Slack help if a cadence is uncertain. Do not emit unsupported phrases.
+利用者が Slack に貼る1行を生成する。日時の形が不明なら現行の Slack ヘルプを確認する。受け付けられないフレーズは出さない。
 
-## Shape
+## 形
 
 ```text
 /remind [who] [what] [when]
 ```
 
-Common English form for a self reminder:
+自分宛てでよく使う英語形:
 
 ```text
 /remind me to [what] [when]
 ```
 
-Who:
+宛先:
 
-- Self: `me`
-- Channel: `#channel-name` (no spaces)
-- User: `@username` (workspace display name / handle the user typed)
+- 自分: `me`
+- チャンネル: `#channel-name`（空白なし）
+- ユーザー: `@username`（利用者が入力したハンドル）
 
-What:
+本文:
 
-- Prefer a single argument. If the message has spaces or would split parsing, wrap it in double quotes.
-- Body may contain Japanese. Keep `to` when using the `me to` form.
+- 引数は1つにまとめる。空白などで Slack が分割しそうなら二重引用符で囲む。
+- 本文は日本語でよい。`me to` 形を使うときは `to` を残す。
 
-When (v1 modes — use a Slack-accepted English phrase):
+日時（v1 のモード。Slack が受け付ける英語フレーズを使う）:
 
-| App mode | Typical Slack phrase |
+| アプリのモード | よく使う Slack フレーズ |
 |---|---|
-| One-shot | `on March 15 at 5:00pm` or `at 5:00pm` (same day) |
-| Every day | `every day at 9:00am` |
-| Every weekday | `every weekday at 9:00am` |
-| Every week | `every Friday at 5:00pm` |
-| Every other week | `every other Friday at 5:00pm` |
-| Every month | Check Slack help before shipping. If Slack has no stable monthly form, hide the mode rather than guessing. |
+| 一度きり | `on March 15 at 5:00pm` または当日なら `at 5:00pm` |
+| 毎日 | `every day at 9:00am` |
+| 平日 | `every weekday at 9:00am` |
+| 毎週 | `every Friday at 5:00pm` |
+| 隔週 | `every other Friday at 5:00pm` |
+| 毎月 | 出荷前に Slack ヘルプを確認する。安定した書き方がなければ、推測せずモードを出さない。 |
 
-Times: 12-hour `9:00am` / `5:00pm` is the usual documented form. Do not append timezone IDs; Slack uses the person who runs `/remind`.
+時刻は 12 時間表記（`9:00am` / `5:00pm`）が公式で多い。タイムゾーン ID は付けない。Slack は `/remind` を実行した人の設定を使う。
 
-## Do not generate
+## 生成しないもの
 
-- Natural-language Japanese time phrases in the command shell (`毎週金曜` as the when-clause)
-- Recurrence Slack does not document
-- Multiple commands, or API calls that create reminders
+- コマンド側の日本語日時（when 句に `毎週金曜` など）
+- Slack が文書化していない繰り返し
+- 複数コマンドや、リマインダーを作る API 呼び出し

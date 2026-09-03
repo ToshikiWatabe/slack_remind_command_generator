@@ -1,16 +1,16 @@
 ---
-description: Product constraints for the Slack /remind generator
+description: Slack /remind 生成アプリの製品制約
 alwaysApply: true
 ---
 
-# Product constraints
+# 製品制約
 
-v1 is a single-page, browser-only form that builds a Slack `/remind` command and copies it.
+v1 は、ブラウザだけで動く1画面のフォームから Slack の `/remind` を組み立て、コピーする。
 
-- Keep the command keywords and time phrases in English. The reminder body may be Japanese.
-- Destinations: `me`, a channel, or a user.
-- Layout: one column. Destination, message, when-mode, mode-specific fields, live preview, copy.
-- Choose when-mode first, then show only the fields that mode needs.
-- No server, Slack API, login, templates, or generation history.
-- Stay static-hostable (GitHub Pages later). Do not add a build that requires a server at runtime.
-- Do not invent Slack time phrases. Offer only forms documented in `.cursor/skills/slack-remind-syntax/SKILL.md` or current Slack help.
+- コマンドのキーワードと日時は英語。リマインド本文は日本語でよい。
+- 宛先は `me`、チャンネル、ユーザー。
+- レイアウトは1列。宛先 → 本文 → 日時の種類 → その種類に必要な項目 → プレビュー → コピー。
+- 日時は種類を先に選び、必要な項目だけ出す。
+- サーバー、Slack API、ログイン、テンプレ、生成履歴は作らない。
+- あとから GitHub Pages に載せられる静的サイトにする。実行時にサーバーが必要な構成は加えない。
+- Slack が受け付けない日時フレーズは出さない。`.cursor/skills/slack-remind-syntax/SKILL.md` か公式ヘルプにある形だけ使う。

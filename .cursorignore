@@ -1,4 +1,4 @@
-# Keep the agent focused on source and docs. Generated and local junk stays out of context.
+# エージェントの対象をソースとドキュメントに絞る。生成物とローカルのゴミは除外する。
 .git
 node_modules
 dist

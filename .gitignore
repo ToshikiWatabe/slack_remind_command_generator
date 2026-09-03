@@ -1,4 +1,4 @@
-# Dependencies and build
+# 依存関係とビルド成果物
 node_modules/
 dist/
 build/
@@ -6,7 +6,7 @@ build/
 .turbo/
 *.tsbuildinfo
 
-# Secrets
+# 秘密情報
 .env
 .env.*
 !.env.example
@@ -15,12 +15,12 @@ secrets.*
 *.pem
 *.key
 
-# OS and editor
+# OS・エディタ
 .DS_Store
 Thumbs.db
 *.log
 
-# Local agent / tool state (not shared)
+# ローカルのエージェント状態（共有しない）
 .superpowers/
 .compound-engineering/config.local.yaml
 .idea/

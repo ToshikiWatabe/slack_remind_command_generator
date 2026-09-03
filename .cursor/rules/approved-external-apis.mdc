@@ -1,10 +1,10 @@
 ---
-description: Company-approved external APIs for this repository
+description: このリポジトリで使ってよい外部 API
 alwaysApply: true
 ---
 
-# Approved external APIs
+# 許可された外部 API
 
-No external APIs are approved for this repository yet.
+いま許可されている外部 API はない。
 
-This app must not call Slack or other third-party APIs in v1. Command generation stays in the browser.
+v1 では Slack を含む第三者 API を呼ばない。コマンド生成はブラウザ内で完結させる。

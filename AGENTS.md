@@ -1,12 +1,12 @@
-# Agent notes
+# エージェント向けメモ
 
-This repository is a static web app that builds Slack `/remind` commands.
+このリポジトリは、Slack の `/remind` コマンドを組み立てる静的 Web アプリです。
 
-- Product contract: `docs/plans/2026-09-03-001-feat-slack-remind-command-generator-plan.md`
-- Project rules: `.cursor/rules/`
-- Slack `/remind` syntax: `.cursor/skills/slack-remind-syntax/SKILL.md`
-- Editor: `.vscode/settings.json` (tab size 2, LF). Do not change the owner's global Cursor `settings.json` for this project.
+- 要件: `docs/plans/2026-09-03-001-feat-slack-remind-command-generator-plan.md`
+- ルール: `.cursor/rules/`
+- Slack 構文: `.cursor/skills/slack-remind-syntax/SKILL.md`
+- エディタ: `.vscode/settings.json`（タブ幅 2、LF）。所有者のグローバルな Cursor 設定は変えない。
 
-Do not add a backend, Slack API integration, accounts, or reminder history unless the product contract changes.
+バックエンド、Slack API、ログイン、履歴保存は、要件が変わらない限り追加しない。
 
-Respond to the repository owner in Japanese unless they write in another language.
+作業言語は日本語（`.cursor/rules/language.mdc`）。

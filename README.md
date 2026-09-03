@@ -1,4 +1,4 @@
-# Slack Remind Command Generator
+# Slack /remind コマンド生成
 
 Slack の `/remind` コマンドを、フォーム入力から組み立ててコピーする Web アプリです。
 

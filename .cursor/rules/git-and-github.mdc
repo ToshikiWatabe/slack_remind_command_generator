@@ -1,12 +1,13 @@
 ---
-description: Git and GitHub conventions for this repository
+description: このリポジトリの Git / GitHub の約束
 alwaysApply: true
 ---
 
-# Git and GitHub
+# Git と GitHub
 
-- Default branch is `main`. Prefer small commits on a feature branch for app work.
-- Do not commit `.env`, keys, tokens, or generated `dist/` / `node_modules/`.
-- Do not force-push `main` or rewrite published history unless the owner explicitly asks.
-- GitHub Pages comes later. Do not add a server, GitHub Action secrets, or Slack tokens for v1.
-- Keep the repo static-hostable. CI, if added, should only build or lint a static site.
+- デフォルトブランチは `main`。アプリの変更は小さめのコミットを機能ブランチで行う。
+- コミットメッセージは日本語。
+- `.env`、鍵、トークン、`dist/`、`node_modules/` はコミットしない。
+- 所有者が明示しない限り、`main` への force push や公開済み履歴の書き換えはしない。
+- GitHub Pages は後回し。v1 でサーバー、Actions の秘密情報、Slack トークンは足さない。
+- 静的サイトとして載せられる状態を保つ。CI を足すなら、静的サイトのビルドか lint だけにする。
