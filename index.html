@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Slack /remind 生成</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 36rem; margin: 1.5rem auto; padding: 0 1rem; }
+    label, .block { display: block; margin: 0.85rem 0 0.35rem; font-weight: 600; }
+    input, select, textarea, button { font: inherit; width: 100%; box-sizing: border-box; padding: 0.45rem; }
+    textarea { min-height: 4.5rem; }
+    button { margin-top: 0.75rem; width: auto; padding: 0.5rem 1rem; }
+    button:disabled { opacity: 0.5; }
+    #preview { width: 100%; min-height: 4rem; font-family: ui-monospace, monospace; }
+    #hint { color: #444; min-height: 1.4em; }
+    .row { display: flex; gap: 0.75rem; }
+    .row > * { flex: 1; }
+  </style>
+</head>
+<body>
+  <h1>Slack /remind 生成</h1>
+  <form id="form">
+    <label for="dest">宛先</label>
+    <select id="dest" name="dest">
+      <option value="me">自分（me）</option>
+      <option value="channel">チャンネル</option>
+      <option value="user">ユーザー</option>
+    </select>
+    <label id="name-label" for="name">チャンネル / ユーザー名</label>
+    <input id="name" name="name" autocomplete="off" hidden>
+
+    <label for="message">本文（日本語可）</label>
+    <textarea id="message" name="message" required placeholder="週報を書く"></textarea>
+
+    <label for="mode">日時の種類</label>
+    <select id="mode" name="mode">
+      <option value="once">一度きり</option>
+      <option value="daily">毎日</option>
+      <option value="weekday">平日</option>
+      <option value="weekly">毎週</option>
+      <option value="biweekly">隔週</option>
+      <option value="monthly">毎月</option>
+    </select>
+
+    <div id="once-fields">
+      <label for="date">日付</label>
+      <input id="date" name="date" type="date">
+    </div>
+    <div id="week-fields" hidden>
+      <label for="weekday">曜日</label>
+      <select id="weekday" name="weekday"></select>
+    </div>
+    <div id="month-fields" hidden>
+      <label for="monthDay">日</label>
+      <input id="monthDay" name="monthDay" type="number" min="1" max="31">
+    </div>
+    <label for="time">時刻</label>
+    <input id="time" name="time" type="time">
+  </form>
+
+  <label for="preview">コマンド</label>
+  <textarea id="preview" readonly></textarea>
+  <p id="hint"></p>
+  <button id="copy" type="button" disabled>コピー</button>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
