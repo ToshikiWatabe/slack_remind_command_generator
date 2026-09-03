@@ -5,6 +5,7 @@ This repository is a static web app that builds Slack `/remind` commands.
 - Product contract: `docs/plans/2026-09-03-001-feat-slack-remind-command-generator-plan.md`
 - Project rules: `.cursor/rules/`
 - Slack `/remind` syntax: `.cursor/skills/slack-remind-syntax/SKILL.md`
+- Editor: `.vscode/settings.json` (tab size 2, LF). Do not change the owner's global Cursor `settings.json` for this project.
 
 Do not add a backend, Slack API integration, accounts, or reminder history unless the product contract changes.
 

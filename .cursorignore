@@ -1,0 +1,10 @@
+# Keep the agent focused on source and docs. Generated and local junk stays out of context.
+.git
+node_modules
+dist
+build
+.vite
+*.log
+.DS_Store
+.env
+.env.*

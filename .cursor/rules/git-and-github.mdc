@@ -1,0 +1,12 @@
+---
+description: Git and GitHub conventions for this repository
+alwaysApply: true
+---
+
+# Git and GitHub
+
+- Default branch is `main`. Prefer small commits on a feature branch for app work.
+- Do not commit `.env`, keys, tokens, or generated `dist/` / `node_modules/`.
+- Do not force-push `main` or rewrite published history unless the owner explicitly asks.
+- GitHub Pages comes later. Do not add a server, GitHub Action secrets, or Slack tokens for v1.
+- Keep the repo static-hostable. CI, if added, should only build or lint a static site.
