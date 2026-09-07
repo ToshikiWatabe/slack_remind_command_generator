@@ -7,32 +7,40 @@
   <style>
     body { font-family: system-ui, sans-serif; max-width: 36rem; margin: 1.5rem auto; padding: 0 1rem; }
     label, .block { display: block; margin: 0.85rem 0 0.35rem; font-weight: 600; }
+    [hidden] { display: none !important; }
     input, select, textarea, button { font: inherit; width: 100%; box-sizing: border-box; padding: 0.45rem; }
     textarea { min-height: 4.5rem; }
     button { margin-top: 0.75rem; width: auto; padding: 0.5rem 1rem; }
     button:disabled { opacity: 0.5; }
     #preview { width: 100%; min-height: 4rem; font-family: ui-monospace, monospace; }
     #hint { color: #444; min-height: 1.4em; }
+    .req { color: #c00; }
+    .checks { display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; }
+    .check { display: flex; align-items: center; gap: 0.3rem; font-weight: 400; margin: 0; width: auto; }
+    .check input { width: auto; }
     .row { display: flex; gap: 0.75rem; }
     .row > * { flex: 1; }
   </style>
 </head>
 <body>
   <h1>Slack /remind 生成</h1>
+  <p>「*」は必須です。</p>
   <form id="form">
-    <label for="dest">宛先</label>
+    <label for="dest">宛先 <span class="req">*</span></label>
     <select id="dest" name="dest">
       <option value="me">自分（me）</option>
       <option value="channel">チャンネル</option>
       <option value="user">ユーザー</option>
     </select>
-    <label id="name-label" for="name">チャンネル / ユーザー名</label>
-    <input id="name" name="name" autocomplete="off" hidden>
+    <div id="name-fields" hidden>
+      <label id="name-label" for="name">チャンネル / ユーザー名 <span class="req">*</span></label>
+      <input id="name" name="name" autocomplete="off">
+    </div>
 
-    <label for="message">本文（日本語可）</label>
+    <label for="message">本文（日本語可） <span class="req">*</span></label>
     <textarea id="message" name="message" required placeholder="週報を書く"></textarea>
 
-    <label for="mode">日時の種類</label>
+    <label for="mode">日時の種類 <span class="req">*</span></label>
     <select id="mode" name="mode">
       <option value="once">一度きり</option>
       <option value="daily">毎日</option>
@@ -44,26 +52,40 @@
     </select>
 
     <div id="once-fields">
-      <label for="date">日付</label>
+      <label for="date">日付 <span class="req">*</span></label>
       <input id="date" name="date" type="date">
     </div>
     <div id="nweeks-fields" hidden>
-      <label for="weeks">何週間に1回</label>
+      <label for="weeks">何週間に1回 <span class="req">*</span></label>
       <input id="weeks" name="weeks" type="number" min="1" step="1" value="2">
     </div>
     <div id="start-fields" hidden>
-      <label for="startDate">開始日</label>
+      <label for="startDate">開始日 <span id="start-req" class="req" hidden>*</span></label>
       <input id="startDate" name="startDate" type="date">
     </div>
     <div id="week-fields" hidden>
-      <label for="weekday">曜日</label>
-      <select id="weekday" name="weekday"></select>
+      <span class="block">曜日 <span class="req">*</span></span>
+      <div id="weekday-box" class="checks"></div>
     </div>
     <div id="month-fields" hidden>
-      <label for="monthDay">日</label>
+      <label for="monthDay">日 <span class="req">*</span></label>
       <input id="monthDay" name="monthDay" type="number" min="1" max="31">
     </div>
-    <label for="time">時刻</label>
+    <div id="year-fields" hidden>
+      <div class="row">
+        <div>
+          <label for="yearMonth">月 <span class="req">*</span></label>
+          <select id="yearMonth" name="yearMonth">
+            <option value="">選ぶ</option>
+          </select>
+        </div>
+        <div>
+          <label for="yearDay">日 <span class="req">*</span></label>
+          <input id="yearDay" name="yearDay" type="number" min="1" max="31">
+        </div>
+      </div>
+    </div>
+    <label for="time">時刻 <span class="req">*</span></label>
     <input id="time" name="time" type="time">
   </form>
 

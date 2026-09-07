@@ -12,7 +12,7 @@ const weekly = buildRemind({
   mode: "weekly",
   date: "",
   time: "17:00",
-  weekday: "Friday",
+  weekdays: ["Friday"],
   monthDay: "",
 });
 assert.equal(weekly.ok, true);
@@ -51,7 +51,7 @@ const nweeks = buildRemind({
   mode: "nweeks",
   date: "",
   time: "09:30",
-  weekday: "",
+  weekdays: ["Monday"],
   monthDay: "",
   weeks: "3",
   startDate: "2026-09-07",
@@ -68,7 +68,7 @@ const later = buildRemind({
   mode: "nweeks",
   date: "",
   time: "09:30",
-  weekday: "",
+  weekdays: ["Monday"],
   monthDay: "",
   weeks: "3",
   startDate: "2026-09-14",
@@ -78,6 +78,18 @@ assert.equal(
   '/remind me to "点検" every 3 weeks on Monday at 9:30am starting September 14, 2026',
 );
 
+const twoDays = buildRemind({
+  dest: "me",
+  name: "",
+  message: "同期",
+  mode: "weekly",
+  date: "",
+  time: "14:00",
+  weekdays: ["Monday", "Wednesday"],
+  monthDay: "",
+});
+assert.equal(twoDays.command, '/remind me to "同期" every Monday and Wednesday at 2:00pm');
+
 const yearly = buildRemind({
   dest: "me",
   name: "",
@@ -85,10 +97,11 @@ const yearly = buildRemind({
   mode: "yearly",
   date: "",
   time: "09:30",
-  weekday: "",
+  weekdays: [],
   monthDay: "",
   weeks: "",
-  startDate: "2026-09-07",
+  yearMonth: "9",
+  yearDay: "7",
 });
 assert.equal(yearly.command, '/remind me to "更新" every September 7th at 9:30am');
 

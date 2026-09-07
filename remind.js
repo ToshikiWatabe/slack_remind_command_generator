@@ -7,6 +7,8 @@ const WEEKDAYS = [
   "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
 ];
 
+const WEEKDAY_JA = ["日", "月", "火", "水", "木", "金", "土"];
+
 export function ordinal(n) {
   const j = n % 10;
   const k = n % 100;
@@ -39,15 +41,24 @@ export function formatStart(iso) {
   return `starting ${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
 }
 
-export function weekdayFromDate(iso) {
-  const d = new Date(`${iso}T00:00:00`);
-  return WEEKDAYS[d.getDay()];
+export function weekdayList({ weekday, weekdays }) {
+  const raw = Array.isArray(weekdays) ? weekdays : weekday ? [weekday] : [];
+  return WEEKDAYS.filter((d) => raw.includes(d));
 }
 
-export function whenPhrase(mode, { date, time, weekday, monthDay, weeks, startDate }) {
+export function formatWeekdays(days) {
+  if (days.length === 1) return days[0];
+  if (days.length === 2) return `${days[0]} and ${days[1]}`;
+  return `${days.slice(0, -1).join(", ")}, and ${days.at(-1)}`;
+}
+
+export function whenPhrase(mode, opts) {
+  const { date, time, monthDay, weeks, startDate, yearMonth, yearDay } = opts;
   if (!time) return "";
   const clock = formatClock(time);
   const start = startDate ? ` ${formatStart(startDate)}` : "";
+  const days = weekdayList(opts);
+  const dayText = days.length ? formatWeekdays(days) : "";
   if (mode === "once") {
     if (!date) return "";
     const d = new Date(`${date}T00:00:00`);
@@ -56,14 +67,13 @@ export function whenPhrase(mode, { date, time, weekday, monthDay, weeks, startDa
   if (mode === "daily") return `every day at ${clock}${start}`;
   if (mode === "weekday") return `every weekday at ${clock}${start}`;
   if (mode === "weekly") {
-    if (!weekday) return "";
-    return `every ${weekday} at ${clock}${start}`;
+    if (!dayText) return "";
+    return `every ${dayText} at ${clock}${start}`;
   }
   if (mode === "nweeks") {
     const n = Number(weeks);
-    if (!Number.isInteger(n) || n < 1 || !startDate) return "";
-    const day = weekdayFromDate(startDate);
-    const body = n === 1 ? `every ${day} at ${clock}` : `every ${n} weeks on ${day} at ${clock}`;
+    if (!Number.isInteger(n) || n < 1 || !startDate || !dayText) return "";
+    const body = n === 1 ? `every ${dayText} at ${clock}` : `every ${n} weeks on ${dayText} at ${clock}`;
     return `${body}${start}`;
   }
   if (mode === "monthly") {
@@ -72,31 +82,35 @@ export function whenPhrase(mode, { date, time, weekday, monthDay, weeks, startDa
     return `every month on the ${ordinal(day)} at ${clock}${start}`;
   }
   if (mode === "yearly") {
-    if (!startDate) return "";
-    const d = new Date(`${startDate}T00:00:00`);
-    return `every ${MONTHS[d.getMonth()]} ${ordinal(d.getDate())} at ${clock}`;
+    const month = Number(yearMonth);
+    const day = Number(yearDay);
+    if (!month || !day) return "";
+    return `every ${MONTHS[month - 1]} ${ordinal(day)} at ${clock}`;
   }
   return "";
 }
 
-export function buildRemind({ dest, name, message, mode, date, time, weekday, monthDay, weeks, startDate }) {
-  const who = whoPhrase(dest, name);
-  const what = message.trim();
-  const when = whenPhrase(mode, { date, time, weekday, monthDay, weeks, startDate });
+export function buildRemind(input) {
+  const who = whoPhrase(input.dest, input.name);
+  const what = input.message.trim();
+  const when = whenPhrase(input.mode, input);
   const missing = [];
-  if (!who) missing.push(dest === "me" ? "宛先" : dest === "channel" ? "チャンネル名" : "ユーザー名");
+  if (!who) missing.push(input.dest === "me" ? "宛先" : input.dest === "channel" ? "チャンネル名" : "ユーザー名");
   if (!what) missing.push("本文");
   if (!when) {
-    if (mode === "once" && !date) missing.push("日付");
-    if (!time) missing.push("時刻");
-    if (mode === "weekly" && !weekday) missing.push("曜日");
-    if (mode === "nweeks") {
-      const n = Number(weeks);
+    if (input.mode === "once" && !input.date) missing.push("日付");
+    if (!input.time) missing.push("時刻");
+    if ((input.mode === "weekly" || input.mode === "nweeks") && !weekdayList(input).length) missing.push("曜日");
+    if (input.mode === "nweeks") {
+      const n = Number(input.weeks);
       if (!Number.isInteger(n) || n < 1) missing.push("週の間隔");
-      if (!startDate) missing.push("開始日");
+      if (!input.startDate) missing.push("開始日");
     }
-    if (mode === "monthly" && !monthDay) missing.push("日");
-    if (mode === "yearly" && !startDate) missing.push("開始日");
+    if (input.mode === "monthly" && !input.monthDay) missing.push("日");
+    if (input.mode === "yearly") {
+      if (!Number(input.yearMonth)) missing.push("月");
+      if (!Number(input.yearDay)) missing.push("日");
+    }
   }
   if (missing.length) return { ok: false, missing, command: "" };
   const body = quoteWhat(what);
@@ -106,4 +120,4 @@ export function buildRemind({ dest, name, message, mode, date, time, weekday, mo
   return { ok: true, missing: [], command };
 }
 
-export { WEEKDAYS };
+export { WEEKDAYS, WEEKDAY_JA, MONTHS };

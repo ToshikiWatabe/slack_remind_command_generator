@@ -37,10 +37,10 @@ description: この生成アプリ向けの Slack /remind（英語構文）。�
 | 一度きり | `on March 15 at 5:00pm` または当日なら `at 5:00pm` |
 | 毎日 | `every day at 9:00am` |
 | 平日 | `every weekday at 9:00am` |
-| 毎週 | `every Friday at 5:00pm` |
-| n週間ごと | `every 3 weeks on Monday at 9:30am starting September 7, 2026` |
+| 毎週 | `every Friday at 5:00pm` / `every Monday and Wednesday at 2:00pm` |
+| n週間ごと | `every 3 weeks on Monday at 9:30am starting September 7, 2026`（曜日はチェックで指定） |
 | 毎月 | `every month on the 1st at 9:00am` |
-| 毎年 | `every September 7th at 9:30am` |
+| 毎年 | `every September 7th at 9:30am`（月と日を指定） |
 
 時刻は 12 時間表記（`9:00am` / `5:00pm`）が公式で多い。タイムゾーン ID は付けない。Slack は `/remind` を実行した人の設定を使う。
 

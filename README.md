@@ -9,7 +9,7 @@ node remind.test.mjs
 python3 -m http.server 8080
 ```
 
-ブラウザで http://localhost:8080 を開きます。
+ブラウザで http://localhost:8080 を開きます。JS を直したあとは、キャッシュが残るのでスーパーリロード（macOS は Cmd+Shift+R）で読み込み直します。
 
 要件は `docs/plans/2026-09-03-001-feat-slack-remind-command-generator-plan.md` にあります。
 
