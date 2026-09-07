@@ -1,0 +1,7 @@
+# UI UX Pro Max（このリポジトリのみ）
+
+画面のデザイン・改善・レビューでは `.cursor/skills/ui-ux-pro-max/SKILL.md` を使う。グローバル（`~/.cursor/skills/`）には入れない。
+
+- スタックは既存どおりプレーン HTML/CSS/JS。Tailwind、React、shadcn は足さない。
+- デザインシステムファイル（`design-system/`）は所有者が頼むまで作らない。
+- データ検索は `python3 .cursor/skills/ui-ux-pro-max/scripts/search.py`。ネットワークは使わない。
