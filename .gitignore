@@ -5,6 +5,8 @@ build/
 .vite/
 .turbo/
 *.tsbuildinfo
+__pycache__/
+*.pyc
 
 # 秘密情報
 .env
