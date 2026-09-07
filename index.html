@@ -5,94 +5,190 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Slack /remind 生成</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 36rem; margin: 1.5rem auto; padding: 0 1rem; }
-    label, .block { display: block; margin: 0.85rem 0 0.35rem; font-weight: 600; }
+    :root {
+      color-scheme: light dark;
+      --bg: #f0fdfa;
+      --surface: #ffffff;
+      --text: #134e4a;
+      --muted: #475569;
+      --border: #cbd5e1;
+      --primary: #0f766e;
+      --primary-soft: #ccfbf1;
+      --focus: #0d9488;
+      --danger: #b91c1c;
+      --space: 1rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1220;
+        --surface: #111827;
+        --text: #e5e7eb;
+        --muted: #a1a1aa;
+        --border: #3f3f46;
+        --primary: #2dd4bf;
+        --primary-soft: #134e4a;
+        --focus: #5eead4;
+        --danger: #fca5a5;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: calc(var(--space) * 1.5) var(--space);
+      line-height: 1.6;
+    }
+    main {
+      max-width: 34rem;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: calc(var(--space) * 1.5);
+    }
+    h1 { font-size: 1.35rem; margin: 0 0 0.25rem; }
+    .note { color: var(--muted); font-size: 0.875rem; margin: 0 0 calc(var(--space) * 1.5); }
+
+    fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+    legend { padding: 0; }
+    label, legend, .block { display: block; margin: var(--space) 0 0.35rem; font-weight: 600; font-size: 0.9rem; }
     [hidden] { display: none !important; }
-    input, select, textarea, button { font: inherit; width: 100%; box-sizing: border-box; padding: 0.45rem; }
-    textarea { min-height: 4.5rem; }
-    button { margin-top: 0.75rem; width: auto; padding: 0.5rem 1rem; }
-    button:disabled { opacity: 0.5; }
-    #preview { width: 100%; min-height: 4rem; font-family: ui-monospace, monospace; }
-    #hint { color: #444; min-height: 1.4em; }
-    .req { color: #c00; }
-    .checks { display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; }
-    .check { display: flex; align-items: center; gap: 0.3rem; font-weight: 400; margin: 0; width: auto; }
-    .check input { width: auto; }
-    .row { display: flex; gap: 0.75rem; }
-    .row > * { flex: 1; }
+
+    input, select, textarea {
+      font: inherit;
+      width: 100%;
+      min-height: 2.75rem;
+      padding: 0.5rem 0.6rem;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+    }
+    textarea { min-height: 4.5rem; resize: vertical; }
+    :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+    .req { color: var(--danger); }
+
+    .checks { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin: 0;
+      padding: 0.4rem 0.75rem;
+      width: auto;
+      min-height: 2.75rem;
+      font-weight: 400;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .check input { width: auto; min-height: 0; margin: 0; accent-color: var(--primary); }
+    .check:has(:checked) { border-color: var(--primary); background: var(--primary-soft); font-weight: 600; }
+
+    .row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .row > * { flex: 1 1 8rem; }
+
+    .result { margin-top: calc(var(--space) * 1.5); padding-top: var(--space); border-top: 1px solid var(--border); }
+    #preview { font-family: ui-monospace, monospace; font-size: 0.9rem; }
+    .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 0.75rem; }
+    button {
+      font: inherit;
+      font-weight: 600;
+      min-height: 2.75rem;
+      padding: 0.5rem 1.25rem;
+      color: var(--surface);
+      background: var(--primary);
+      border: 1px solid transparent;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    button:hover:not(:disabled) { opacity: 0.9; }
+    button:disabled { color: var(--muted); background: transparent; border-color: var(--border); cursor: not-allowed; }
+    #hint { color: var(--muted); font-size: 0.875rem; margin: 0; }
   </style>
 </head>
 <body>
-  <h1>Slack /remind 生成</h1>
-  <p>「*」は必須です。</p>
-  <form id="form">
-    <label for="dest">宛先 <span class="req">*</span></label>
-    <select id="dest" name="dest">
-      <option value="me">自分（me）</option>
-      <option value="channel">チャンネル</option>
-      <option value="user">ユーザー</option>
-    </select>
-    <div id="name-fields" hidden>
-      <label id="name-label" for="name">チャンネル / ユーザー名 <span class="req">*</span></label>
-      <input id="name" name="name" autocomplete="off">
-    </div>
+  <main>
+    <h1>Slack /remind 生成</h1>
+    <p class="note">項目を埋めるとコマンドができます。「<span class="req">*</span>」は必須です。</p>
 
-    <label for="message">本文（日本語可） <span class="req">*</span></label>
-    <textarea id="message" name="message" required placeholder="週報を書く"></textarea>
+    <form id="form">
+      <label for="dest">宛先 <span class="req" aria-hidden="true">*</span></label>
+      <select id="dest" name="dest">
+        <option value="me">自分（me）</option>
+        <option value="channel">チャンネル</option>
+        <option value="user">ユーザー</option>
+      </select>
+      <div id="name-fields" hidden>
+        <label for="name">チャンネル / ユーザー名 <span class="req" aria-hidden="true">*</span></label>
+        <input id="name" name="name" autocomplete="off">
+      </div>
 
-    <label for="mode">日時の種類 <span class="req">*</span></label>
-    <select id="mode" name="mode">
-      <option value="once">一度きり</option>
-      <option value="daily">毎日</option>
-      <option value="weekday">平日</option>
-      <option value="weekly">毎週</option>
-      <option value="nweeks">n週間ごと</option>
-      <option value="monthly">毎月</option>
-      <option value="yearly">毎年</option>
-    </select>
+      <label for="message">本文（日本語可） <span class="req" aria-hidden="true">*</span></label>
+      <textarea id="message" name="message" required placeholder="週報を書く"></textarea>
 
-    <div id="once-fields">
-      <label for="date">日付 <span class="req">*</span></label>
-      <input id="date" name="date" type="date">
-    </div>
-    <div id="nweeks-fields" hidden>
-      <label for="weeks">何週間に1回 <span class="req">*</span></label>
-      <input id="weeks" name="weeks" type="number" min="1" step="1" value="2">
-    </div>
-    <div id="start-fields" hidden>
-      <label for="startDate">開始日 <span id="start-req" class="req" hidden>*</span></label>
-      <input id="startDate" name="startDate" type="date">
-    </div>
-    <div id="week-fields" hidden>
-      <span class="block">曜日 <span class="req">*</span></span>
-      <div id="weekday-box" class="checks"></div>
-    </div>
-    <div id="month-fields" hidden>
-      <label for="monthDay">日 <span class="req">*</span></label>
-      <input id="monthDay" name="monthDay" type="number" min="1" max="31">
-    </div>
-    <div id="year-fields" hidden>
-      <div class="row">
-        <div>
-          <label for="yearMonth">月 <span class="req">*</span></label>
-          <select id="yearMonth" name="yearMonth">
-            <option value="">選ぶ</option>
-          </select>
-        </div>
-        <div>
-          <label for="yearDay">日 <span class="req">*</span></label>
-          <input id="yearDay" name="yearDay" type="number" min="1" max="31">
+      <label for="mode">日時の種類 <span class="req" aria-hidden="true">*</span></label>
+      <select id="mode" name="mode">
+        <option value="once">一度きり</option>
+        <option value="daily">毎日</option>
+        <option value="weekday">平日</option>
+        <option value="weekly">毎週</option>
+        <option value="nweeks">n週間ごと</option>
+        <option value="monthly">毎月</option>
+        <option value="yearly">毎年</option>
+      </select>
+
+      <div id="once-fields">
+        <label for="date">日付 <span class="req" aria-hidden="true">*</span></label>
+        <input id="date" name="date" type="date" required>
+      </div>
+      <div id="nweeks-fields" hidden>
+        <label for="weeks">何週間に1回 <span class="req" aria-hidden="true">*</span></label>
+        <input id="weeks" name="weeks" type="number" min="1" step="1" value="2" required>
+      </div>
+      <div id="start-fields" hidden>
+        <label for="startDate">開始日 <span id="start-req" class="req" aria-hidden="true" hidden>*</span></label>
+        <input id="startDate" name="startDate" type="date">
+      </div>
+      <fieldset id="week-fields" hidden>
+        <legend>曜日 <span class="req" aria-hidden="true">*</span></legend>
+        <div id="weekday-box" class="checks"></div>
+      </fieldset>
+      <div id="month-fields" hidden>
+        <label for="monthDay">日 <span class="req" aria-hidden="true">*</span></label>
+        <input id="monthDay" name="monthDay" type="number" min="1" max="31" required>
+      </div>
+      <div id="year-fields" hidden>
+        <div class="row">
+          <div>
+            <label for="yearMonth">月 <span class="req" aria-hidden="true">*</span></label>
+            <select id="yearMonth" name="yearMonth" required>
+              <option value="">選ぶ</option>
+            </select>
+          </div>
+          <div>
+            <label for="yearDay">日 <span class="req" aria-hidden="true">*</span></label>
+            <input id="yearDay" name="yearDay" type="number" min="1" max="31" required>
+          </div>
         </div>
       </div>
-    </div>
-    <label for="time">時刻 <span class="req">*</span></label>
-    <input id="time" name="time" type="time">
-  </form>
 
-  <label for="preview">コマンド</label>
-  <textarea id="preview" readonly></textarea>
-  <p id="hint"></p>
-  <button id="copy" type="button" disabled>コピー</button>
+      <label for="time">時刻 <span class="req" aria-hidden="true">*</span></label>
+      <input id="time" name="time" type="time" required>
+    </form>
+
+    <div class="result">
+      <label for="preview">コマンド</label>
+      <textarea id="preview" readonly aria-describedby="hint"></textarea>
+      <div class="actions">
+        <button id="copy" type="button" disabled>コピー</button>
+        <p id="hint" role="status"></p>
+      </div>
+    </div>
+  </main>
   <script type="module" src="app.js"></script>
 </body>
 </html>

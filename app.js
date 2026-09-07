@@ -47,6 +47,7 @@ function sync() {
   document.getElementById("nweeks-fields").hidden = mode !== "nweeks";
   document.getElementById("start-fields").hidden = mode === "once" || mode === "yearly";
   document.getElementById("start-req").hidden = mode !== "nweeks";
+  form.startDate.required = mode === "nweeks";
   document.getElementById("month-fields").hidden = mode !== "monthly";
   document.getElementById("year-fields").hidden = mode !== "yearly";
 
